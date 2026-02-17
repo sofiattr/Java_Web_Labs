@@ -5,6 +5,7 @@ class Book {
     private String author;
     private int year;
 
+    // ... ваші геттери та сеттери ...
     public void setTitle(String title) { this.title = title; }
     public void setAuthor(String author) { this.author = author; }
     public void setYear(int year) { this.year = year; }
@@ -12,13 +13,14 @@ class Book {
     public void displayInfo() {
         System.out.println("Книга: " + title + ", Автор: " + author + ", Рік: " + year);
     }
-}
 
-class Account {
-    private double balance;
-    private String accountNumber;
-
-    public void deposit(double amount) { balance += amount; }
-    public void withdraw(double amount) { if (amount <= balance) balance -= amount; }
-    public double getBalance() { return balance; }
+    public static void main(String[] args) {
+        System.out.println("--- Перевірка Книги ---");
+        Book myBook = new Book();
+        myBook.setTitle("Тіні забутих предків");
+        myBook.setAuthor("Михайло Коцюбинський");
+        myBook.setYear(1911);
+        myBook.displayInfo();
+    }
+    
 }
