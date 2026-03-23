@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "brand": "Royal Canin",
+    "flavor": "Курка та рис",
+    "weightKg": 2.0,
+    "price": 850.5,
+    "imageUrl": "https://images.unsplash.com/photo-1573865526739-1065ae183282?w=400&h=300&fit=crop"
+  }
+]
