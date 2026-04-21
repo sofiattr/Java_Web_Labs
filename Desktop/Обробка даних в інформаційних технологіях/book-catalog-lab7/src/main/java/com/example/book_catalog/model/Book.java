@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "books")
-@Data // Автоматично генерує всі геттери, сеттери, toString() та equals() [cite: 56, 71, 123]
-@NoArgsConstructor // Автоматично генерує порожній конструктор [cite: 57, 124]
-@AllArgsConstructor // Автоматично генерує конструктор з усіма аргументами [cite: 58, 125]
+@Data // Автоматично генерує всі геттери, сеттери, toString() та equals()
+@NoArgsConstructor // Автоматично генерує порожній конструктор
+@AllArgsConstructor // Автоматично генерує конструктор з усіма аргументами
 public class Book {
 
     @Id

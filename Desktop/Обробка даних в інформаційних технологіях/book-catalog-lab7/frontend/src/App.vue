@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>📚 Мій Онлайн-Каталог Книг</h1>
+    <h1>📚 Мій Онлайн-Каталог Книг </h1>
 
     <div class="add-form">
       <h3>Додати нову книгу</h3>
@@ -11,7 +11,11 @@
       <button @click="addBook">Додати книгу</button>
     </div>
 
-    <div class="books-grid">
+    <div v-if="books.length === 0" class="empty-message">
+      <p>Каталог поки що порожній. Додайте свою першу книгу вище! 👆</p>
+    </div>
+
+    <div class="books-grid" v-else>
       <div v-for="book in books" :key="book.id" class="book-card">
         <img :src="book.imageUrl || 'https://via.placeholder.com/150'" alt="Обкладинка" class="book-cover"/>
         <h2>{{ book.title }}</h2>
@@ -27,23 +31,20 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-// Змінні для зберігання даних
 const books = ref([]);
 const newBook = ref({ title: '', author: '', description: '', imageUrl: '' });
 
-// Адреса вашого Java-бекенду
+// Адреса твого Java-сервера
 const API_URL = 'http://localhost:8081/api/books';
 
-// Функція: Отримати всі книги (GET)
 const fetchBooks = async () => {
   try {
     const response = await axios.get(API_URL);
 
-    // Spring Data REST загортає масив у _embedded
-    // Якщо масив існує, ми його перебираємо і витягуємо ID з посилання
+
     if (response.data._embedded && response.data._embedded.books) {
       books.value = response.data._embedded.books.map(book => {
-        // Беремо посилання (href) і відрізаємо останню частину, щоб отримати ID [cite: 367]
+        // Витягуємо ID з посилання
         const urlParts = book._links.self.href.split('/');
         book.id = urlParts[urlParts.length - 1];
         return book;
@@ -56,7 +57,6 @@ const fetchBooks = async () => {
   }
 };
 
-// Функція: Додати книгу (POST)
 const addBook = async () => {
   if (!newBook.value.title) {
     alert('Назва книги обов\'язкова!');
@@ -64,24 +64,22 @@ const addBook = async () => {
   }
   try {
     await axios.post(API_URL, newBook.value);
-    newBook.value = { title: '', author: '', description: '', imageUrl: '' }; // Очищаємо форму
-    fetchBooks(); // Оновлюємо список
+    newBook.value = { title: '', author: '', description: '', imageUrl: '' };
+    fetchBooks();
   } catch (error) {
     console.error('Помилка додавання книги:', error);
   }
 };
 
-// Функція: Видалити книгу (DELETE)
 const deleteBook = async (id) => {
   try {
     await axios.delete(`${API_URL}/${id}`);
-    fetchBooks(); // Оновлюємо список
+    fetchBooks();
   } catch (error) {
     console.error('Помилка видалення книги:', error);
   }
 };
 
-// Завантажуємо книги одразу при відкритті сторінки
 onMounted(() => {
   fetchBooks();
 });
@@ -93,6 +91,7 @@ onMounted(() => {
 input { padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
 button { padding: 10px; background: #42b983; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
 button:hover { background: #33996b; }
+.empty-message { padding: 30px; background: #fff3cd; color: #856404; border-radius: 8px; margin-top: 20px; font-size: 18px; font-weight: bold; border: 1px solid #ffeeba; }
 .delete-btn { background: #ff4d4d; margin-top: 10px; }
 .delete-btn:hover { background: #cc0000; }
 .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
